@@ -1,0 +1,14 @@
+html,
+body,
+#root,
+.mantine-AppShell-root,
+.mantine-AppShell-body {
+    height: 100%;
+}
+
+body,
+footer,
+header,
+.mantine-AppShell-body > * {
+    transition: all 500ms ease-in-out;
+}
