@@ -1,5 +1,3 @@
 import { MantineThemeOverride } from '@mantine/core'
 
-export const theme: MantineThemeOverride = {
-    colorScheme: 'light',
-}
+export const theme: MantineThemeOverride = {}
