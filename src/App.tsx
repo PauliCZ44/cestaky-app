@@ -1,9 +1,7 @@
-import { AppShell, Button, ColorScheme, ColorSchemeProvider, Group, Header, MantineProvider, Navbar } from '@mantine/core'
-import { useState } from 'react'
-import { theme } from './theme'
-import { ToggleScheme } from './ToggleScheme'
-import './global.css'
+import { AppShell, ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
 import { useColorScheme, useLocalStorage } from '@mantine/hooks'
+import { AppContent, Header, Navbar, Footer } from './Components'
+import './global.css'
 
 export default function App() {
     const preferredColorScheme = useColorScheme()
@@ -25,29 +23,16 @@ export default function App() {
                     }}
                     padding="md"
                     fixed={false}
-                    navbar={
-                        <Navbar width={{ base: 300 }} height="100%" p="xs">
-                            <Navbar.Section grow mt="xs">
-                                Link
-                            </Navbar.Section>
-                            <Navbar.Section>Section</Navbar.Section>
-                        </Navbar>
-                    }
-                    header={
-                        <Header height={60}>
-                            <Group sx={{ height: '100%' }} px={20} position="apart">
-                                <ToggleScheme />
-                            </Group>
-                        </Header>
-                    }
-                    footer={<footer>Footer</footer>}
+                    navbar={<Navbar />}
+                    header={<Header />}
+                    footer={<Footer />}
                     styles={theme => ({
                         main: {
                             backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
                         },
                     })}
                 >
-                    Your application goes here
+                    <AppContent />
                 </AppShell>
             </MantineProvider>
         </ColorSchemeProvider>
