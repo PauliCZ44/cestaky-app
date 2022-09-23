@@ -115,7 +115,7 @@ export function AppContent() {
                     <TextInput
                         mt="md"
                         label="Result in Kč"
-                        disabled
+                        readOnly
                         {...form.getInputProps('result')}
                     />
                 </SimpleGrid>
