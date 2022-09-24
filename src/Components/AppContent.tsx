@@ -119,8 +119,6 @@ export function AppContent() {
                         {...form.getInputProps('result')}
                     />
                 </SimpleGrid>
-
-                {/* <Button type="submit">So smth</Button> */}
             </form>
         </Box>
     )
