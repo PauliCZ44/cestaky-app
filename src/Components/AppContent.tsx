@@ -12,6 +12,7 @@ import { DatePicker } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useEffect } from 'react'
 import FluentCalendarLtr24Regular from '~icons/fluent/calendar-ltr-24-regular'
+import { useMediaLarger } from '../utils/mediaQueriesConsts'
 interface FormValues {
     distance: number | undefined
     result: string
@@ -49,11 +50,11 @@ export function AppContent() {
             form.setFieldValue('result', `Kč ${roundPrice(distance * price, parseInt(rounding))},-`)
         }
     }, [form.values])
-
+    const cols = useMediaLarger('xs') ? 2 : 1
     return (
         <Box px="sm">
             <form onSubmit={form.onSubmit(values => console.log(values))}>
-                <SimpleGrid cols={2} pt="1rem" pb="3rem" spacing="xl">
+                <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
                     <TextInput
                         withAsterisk
                         label="Start destination"
@@ -102,7 +103,7 @@ export function AppContent() {
                     />
                 </SimpleGrid>
                 <Divider></Divider>
-                <SimpleGrid cols={2} pt="1rem" pb="3rem" spacing="xl">
+                <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
                     <Radio.Group
                         name="rounding"
                         label="Round the result to decimal places"

@@ -11,13 +11,17 @@ const useStyles = createStyles((theme, _params, getRef) => {
         header: {
             paddingBottom: theme.spacing.md,
             marginBottom: theme.spacing.md * 1.5,
-            borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
+            borderBottom: `1px solid ${
+                theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
+            }`,
         },
 
         footer: {
             paddingTop: theme.spacing.md,
             marginTop: theme.spacing.md,
-            borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
+            borderTop: `1px solid ${
+                theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
+            }`,
         },
 
         link: {
@@ -32,11 +36,17 @@ const useStyles = createStyles((theme, _params, getRef) => {
             fontWeight: 500,
 
             '&:hover': {
-                backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+                backgroundColor:
+                    theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
                 color: theme.colorScheme === 'dark' ? theme.white : theme.black,
 
                 [`& .${icon}`]: {
                     color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+                },
+            },
+            [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+                '> span': {
+                    display: 'none',
                 },
             },
         },
@@ -44,12 +54,15 @@ const useStyles = createStyles((theme, _params, getRef) => {
         linkIcon: {
             ref: icon,
             color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
-            marginRight: theme.spacing.sm,
+            [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+                marginRight: theme.spacing.sm,
+            },
         },
 
         linkActive: {
             '&, &:hover': {
-                backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
+                backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor })
+                    .background,
                 color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
                 [`& .${icon}`]: {
                     color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
@@ -85,7 +98,7 @@ export function AppNavbar() {
     ))
 
     return (
-        <Navbar height={'100%'} width={{ sm: 300 }} p="md">
+        <Navbar height={'100%'} p="md">
             <Navbar.Section grow>
                 <Group className={classes.header} position="apart">
                     LOGO
