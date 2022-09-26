@@ -74,42 +74,6 @@ export function CustomFonts() {
                         fontWeight: 700,
                         src: `local(''), url('/fonts/ubuntu/ubuntu-v20-latin-ext_latin-700italic.woff2') format('woff2'), url('/fonts/ubuntu/ubuntu-v20-latin-ext_latin-700italic.woff') format('woff')`,
                     },
-                } /* kreon-regular - latin-ext_latin */,
-
-                {
-                    '@font-face': {
-                        fontFamily: 'Kreon',
-                        fontStyle: 'normal',
-                        fontWeight: 400,
-                        src: `local(''), url('/fonts/kreon/kreon-v32-latin-ext_latin-regular.woff2') format('woff2'), url('/fonts/kreon/kreon-v32-latin-ext_latin-regular.woff') format('woff')`,
-                    },
-                },
-                /* kreon-500 - latin-ext_latin */
-                {
-                    '@font-face': {
-                        fontFamily: 'Kreon',
-                        fontStyle: 'normal',
-                        fontWeight: 500,
-                        src: `local(''), url('/fonts/kreon/kreon-v32-latin-ext_latin-500.woff2') format('woff2'), url('/fonts/kreon/kreon-v32-latin-ext_latin-500.woff') format('woff')`,
-                    },
-                },
-                /* kreon-600 - latin-ext_latin */
-                {
-                    '@font-face': {
-                        fontFamily: 'Kreon',
-                        fontStyle: 'normal',
-                        fontWeight: 600,
-                        src: `local(''), url('/fonts/kreon/kreon-v32-latin-ext_latin-600.woff2') format('woff2'), url('/fonts/kreon/kreon-v32-latin-ext_latin-600.woff') format('woff')`,
-                    },
-                },
-                /* kreon-700 - latin-ext_latin */
-                {
-                    '@font-face': {
-                        fontFamily: 'Kreon',
-                        fontStyle: 'normal',
-                        fontWeight: 700,
-                        src: `local(''), url('/fonts/kreon/kreon-v32-latin-ext_latin-700.woff2') format('woff2'), url('/fonts/kreon/kreon-v32-latin-ext_latin-700.woff') format('woff')`,
-                    },
                 },
                 /* passion-one-regular - latin-ext_latin */
                 {
