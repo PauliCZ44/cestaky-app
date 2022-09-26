@@ -111,6 +111,33 @@ export function CustomFonts() {
                         src: `local(''), url('/fonts/kreon/kreon-v32-latin-ext_latin-700.woff2') format('woff2'), url('/fonts/kreon/kreon-v32-latin-ext_latin-700.woff') format('woff')`,
                     },
                 },
+                /* passion-one-regular - latin-ext_latin */
+                {
+                    '@font-face': {
+                        fontFamily: 'Passion One',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        src: `local(''), url('/fonts/passion-one/passion-one-v16-latin-ext_latin-regular.woff2') format('woff2'), url('/fonts/passion-one/passion-one-v16-latin-ext_latin-regular.woff') format('woff')`,
+                    },
+                },
+                /* passion-one-700 - latin-ext_latin */
+                {
+                    '@font-face': {
+                        fontFamily: 'Passion One',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        src: `local(''), url('/fonts/passion-one/passion-one-v16-latin-ext_latin-700.woff2') format('woff2'), url('/fonts/passion-one/passion-one-v16-latin-ext_latin-700.woff') format('woff')`,
+                    },
+                },
+                /* passion-one-900 - latin-ext_latin */
+                {
+                    '@font-face': {
+                        fontFamily: 'Passion One',
+                        fontStyle: 'normal',
+                        fontWeight: 900,
+                        src: `local(''), url('/fonts/passion-one/passion-one-v16-latin-ext_latin-900.woff2') format('woff2'), url('/fonts/passion-one/passion-one-v16-latin-ext_latin-900.woff') format('woff')`,
+                    },
+                },
             ]}
         />
     )

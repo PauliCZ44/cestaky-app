@@ -2,7 +2,10 @@ import {
     Box,
     Button,
     Checkbox,
+    Col,
     Divider,
+    Grid,
+    Input,
     NumberInput,
     Radio,
     SimpleGrid,
@@ -22,6 +25,7 @@ interface FormValues {
     destinationEnd: string
     destinationStart: string
     rounding: string
+    backDrive: string[]
 }
 
 const roundPrice = (price: number, rounding: number) => {
@@ -40,16 +44,21 @@ export function AppContent() {
             result: 'Kč 0,-',
             price: 4,
             rounding: '0',
+            backDrive: ['backDrive'],
         },
     })
 
     useEffect(() => {
         console.log(form.values)
-        const { distance, price, rounding } = form.values
+        const { distance, price, rounding, backDrive } = form.values
         if (distance && price) {
-            form.setFieldValue('result', `Kč ${roundPrice(distance * price, parseInt(rounding))},-`)
+            form.setFieldValue(
+                'result',
+                `Kč ${roundPrice(distance * price * (backDrive ? 2 : 1), parseInt(rounding))},-`
+            )
         }
     }, [form.values])
+
     const cols = useMediaLarger('xs') ? 2 : 1
     return (
         <Box px="sm">
@@ -104,21 +113,32 @@ export function AppContent() {
                 </SimpleGrid>
                 <Divider></Divider>
                 <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
-                    <Radio.Group
-                        name="rounding"
-                        label="Round the result to decimal places"
-                        {...form.getInputProps('rounding')}
+                    <Box
+                        sx={theme => ({
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: theme.spacing.lg,
+                            flexWrap: 'wrap',
+                        })}
                     >
-                        <Radio value="0" label="0" />
-                        <Radio value="1" label="1" />
-                        <Radio value="2" label="2" />
-                    </Radio.Group>
-                    <TextInput
-                        mt="md"
-                        label="Result in Kč"
-                        readOnly
-                        {...form.getInputProps('result')}
-                    />
+                        <Radio.Group
+                            mr="lg"
+                            name="rounding"
+                            label="Round the result to decimal places"
+                            {...form.getInputProps('rounding')}
+                        >
+                            <Radio value="0" label="0" />
+                            <Radio value="1" label="1" />
+                            <Radio value="2" label="2" />
+                        </Radio.Group>
+                        <Input.Wrapper label="Include drive back">
+                            <Checkbox
+                                pt={10}
+                                {...form.getInputProps('backDrive', { type: 'checkbox' })}
+                            />
+                        </Input.Wrapper>
+                    </Box>
+                    <TextInput label="Result in Kč" readOnly {...form.getInputProps('result')} />
                 </SimpleGrid>
             </form>
         </Box>
