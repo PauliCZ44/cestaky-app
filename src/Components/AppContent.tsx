@@ -52,10 +52,14 @@ export function AppContent() {
         console.log(form.values)
         const { distance, price, rounding, backDrive } = form.values
         if (distance && price) {
-            form.setFieldValue(
-                'result',
-                `Kč ${roundPrice(distance * price * (backDrive ? 2 : 1), parseInt(rounding))},-`
-            )
+            let res = roundPrice(distance * price * (backDrive ? 2 : 1), parseInt(rounding))
+            if (res === 0) {
+                form.setFieldValue('result', `Invalid inputs - rounded to 0`)
+                return
+            }
+            form.setFieldValue('result', `Kč ${roundPrice(res, parseInt(rounding))},-`)
+        } else {
+            form.setFieldValue('result', `...`)
         }
     }, [form.values])
 
@@ -127,9 +131,9 @@ export function AppContent() {
                             label="Round the result to decimal places"
                             {...form.getInputProps('rounding')}
                         >
-                            <Radio value="0" label="0" />
-                            <Radio value="1" label="1" />
-                            <Radio value="2" label="2" />
+                            <Radio value="0" label="No rounding" />
+                            <Radio value="1" label="10s" />
+                            <Radio value="2" label="100s" />
                         </Radio.Group>
                         <Input.Wrapper label="Include drive back">
                             <Checkbox
