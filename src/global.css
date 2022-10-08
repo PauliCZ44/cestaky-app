@@ -2,8 +2,10 @@ html,
 body,
 #root,
 .mantine-AppShell-root,
-.mantine-AppShell-body {
+.mantine-AppShell-body,
+main {
     height: 100%;
+    overflow: auto;
 }
 
 body,

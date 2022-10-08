@@ -10,7 +10,7 @@ interface FormValues {
 
 type ButtonClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>
 
-export function Persons() {
+export default function Persons() {
     const [persons, setPersons] = useState([])
     /*
         // Input to add person. Save them to the local storage for now.

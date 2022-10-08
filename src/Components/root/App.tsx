@@ -1,9 +1,9 @@
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
 import { useColorScheme, useLocalStorage } from '@mantine/hooks'
-import './global.css'
 import Router from './Router'
-import { themeOverrides } from './themeOverrides'
-import { CustomFonts } from './utils/CustomFonts'
+import { themeOverrides } from '../../themeOverrides'
+import { CustomFonts } from '../../utils/CustomFonts'
+import AuthShell from './AuthShell'
 
 export default function App() {
     const preferredColorScheme = useColorScheme()
@@ -24,7 +24,9 @@ export default function App() {
                 withNormalizeCSS
             >
                 <CustomFonts />
-                <Router isDark={isDark} toggleColorScheme={toggleColorScheme} />
+                <AuthShell>
+                    <Router isDark={isDark} toggleColorScheme={toggleColorScheme} />
+                </AuthShell>
             </MantineProvider>
         </ColorSchemeProvider>
     )

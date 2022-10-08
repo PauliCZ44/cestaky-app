@@ -30,7 +30,7 @@ const roundPrice = (price: number, rounding: number) => {
     return Math.round(price / factor) * factor
 }
 
-export function MainApp() {
+export default function MainApp() {
     const form = useForm<FormValues>({
         initialValues: {
             distance: undefined,

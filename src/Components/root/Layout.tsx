@@ -1,7 +1,6 @@
 import { AppShell, Box } from '@mantine/core'
 import { Outlet } from 'react-router-dom'
-import { AppNavbar, Header } from './Components'
-import './global.css'
+import { AppNavbar, Header } from '../'
 
 interface LayoutProps {
     children?: React.ReactNode
