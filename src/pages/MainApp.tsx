@@ -1,10 +1,7 @@
 import {
     Box,
-    Button,
     Checkbox,
-    Col,
     Divider,
-    Grid,
     Input,
     NumberInput,
     Radio,
@@ -67,86 +64,84 @@ export function MainApp() {
     }, [distance, price, rounding, backDrive])
 
     return (
-        <Box px="sm">
-            <form onSubmit={form.onSubmit(values => console.log(values))}>
-                <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
-                    <TextInput
-                        withAsterisk
-                        label="Start destination"
-                        placeholder="Search..."
-                        {...form.getInputProps('destinationStart')}
-                    />
-                    <TextInput
-                        withAsterisk
-                        label="End destination"
-                        placeholder="Search..."
-                        {...form.getInputProps('destinationEnd')}
-                    />
-                    <NumberInput
-                        min={1}
-                        step={0.05}
-                        precision={2}
-                        stepHoldDelay={200}
-                        stepHoldInterval={100}
-                        withAsterisk
-                        label="Price per km in kč"
-                        {...form.getInputProps('price')}
-                    />
-                    <NumberInput
-                        min={1}
-                        step={0.5}
-                        precision={1}
-                        stepHoldDelay={200}
-                        stepHoldInterval={100}
-                        withAsterisk
-                        label="Distance"
-                        placeholder="Km"
-                        {...form.getInputProps('distance')}
-                    />
-                    <TextInput
-                        withAsterisk
-                        label="Name of the driver"
-                        placeholder="Name"
-                        {...form.getInputProps('name')}
-                    />
-                    <DatePicker
-                        icon={<FluentCalendarLtr24Regular />}
-                        placeholder="DD/MM/YYYY"
-                        label="Date of the drive"
-                        withAsterisk
-                        {...form.getInputProps('date')}
-                    />
-                </SimpleGrid>
-                <Divider></Divider>
-                <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
-                    <Box
-                        sx={theme => ({
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: theme.spacing.lg,
-                            flexWrap: 'wrap',
-                        })}
+        <form onSubmit={form.onSubmit(values => console.log(values))}>
+            <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
+                <TextInput
+                    withAsterisk
+                    label="Start destination"
+                    placeholder="Search..."
+                    {...form.getInputProps('destinationStart')}
+                />
+                <TextInput
+                    withAsterisk
+                    label="End destination"
+                    placeholder="Search..."
+                    {...form.getInputProps('destinationEnd')}
+                />
+                <NumberInput
+                    min={1}
+                    step={0.05}
+                    precision={2}
+                    stepHoldDelay={200}
+                    stepHoldInterval={100}
+                    withAsterisk
+                    label="Price per km in kč"
+                    {...form.getInputProps('price')}
+                />
+                <NumberInput
+                    min={1}
+                    step={0.5}
+                    precision={1}
+                    stepHoldDelay={200}
+                    stepHoldInterval={100}
+                    withAsterisk
+                    label="Distance"
+                    placeholder="Km"
+                    {...form.getInputProps('distance')}
+                />
+                <TextInput
+                    withAsterisk
+                    label="Name of the driver"
+                    placeholder="Name"
+                    {...form.getInputProps('name')}
+                />
+                <DatePicker
+                    icon={<FluentCalendarLtr24Regular />}
+                    placeholder="DD/MM/YYYY"
+                    label="Date of the drive"
+                    withAsterisk
+                    {...form.getInputProps('date')}
+                />
+            </SimpleGrid>
+            <Divider></Divider>
+            <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
+                <Box
+                    sx={theme => ({
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: theme.spacing.lg,
+                        flexWrap: 'wrap',
+                    })}
+                >
+                    <Radio.Group
+                        mr="lg"
+                        name="rounding"
+                        label="Round the result to decimal places"
+                        {...form.getInputProps('rounding')}
                     >
-                        <Radio.Group
-                            mr="lg"
-                            name="rounding"
-                            label="Round the result to decimal places"
-                            {...form.getInputProps('rounding')}
-                        >
-                            <Radio value="0" label="No rounding" />
-                            <Radio value="1" label="10s" />
-                            <Radio value="2" label="100s" />
-                        </Radio.Group>
-                        <Input.Wrapper label="Include drive back">
-                            <Checkbox
-                                pt={10}
-                                {...form.getInputProps('backDrive', { type: 'checkbox' })}
-                            />
-                        </Input.Wrapper>
-                    </Box>
-                    <TextInput label="Result in Kč" readOnly {...form.getInputProps('result')} />
-                </SimpleGrid>
-            </form>
-        </Box>
+                        <Radio value="0" label="No rounding" />
+                        <Radio value="1" label="10s" />
+                        <Radio value="2" label="100s" />
+                    </Radio.Group>
+                    <Input.Wrapper label="Include drive back">
+                        <Checkbox
+                            pt={10}
+                            {...form.getInputProps('backDrive', { type: 'checkbox' })}
+                        />
+                    </Input.Wrapper>
+                </Box>
+                <TextInput label="Result in Kč" readOnly {...form.getInputProps('result')} />
+            </SimpleGrid>
+        </form>
     )
 }
