@@ -1,9 +1,15 @@
-import { AppShell, ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
+import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
 import { useColorScheme, useLocalStorage } from '@mantine/hooks'
-import { AppContent, Header, AppNavbar, Footer } from './Components'
+import { Route, Routes } from 'react-router-dom'
 import './global.css'
+import Layout from './Layout'
+import { Error404, MainApp } from './pages'
 import { themeOverrides } from './themeOverrides'
 import { CustomFonts } from './utils/CustomFonts'
+
+function NoMatch() {
+    return <div>NoMatch</div>
+}
 
 export default function App() {
     const preferredColorScheme = useColorScheme()
@@ -24,35 +30,21 @@ export default function App() {
                 withNormalizeCSS
             >
                 <CustomFonts />
-                <AppShell
-                    sx={theme => ({
-                        '--mantine-navbar-width': '80px',
-                        [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
-                            '--mantine-navbar-width': 'max(200px, 15vw)',
-                        },
-                        display: 'flex',
-                        flexDirection: 'column',
-                        '& footer': {
-                            backgroundColor: isDark ? theme.colors.dark[9] : theme.colors.gray[3],
-                        },
-                        '& nav': {
-                            width: 'var(--mantine-navbar-width)',
-                        },
-                    })}
-                    padding="md"
-                    fixed={false}
-                    navbar={<AppNavbar />}
-                    header={<Header />}
-                    // footer={<Footer />}
-                    styles={theme => ({
-                        main: {
-                            backgroundColor: isDark ? theme.colors.dark[8] : theme.colors.gray[0],
-                            width: 'calc (100% - var(--mantine-navbar-width))',
-                        },
-                    })}
-                >
-                    <AppContent />
-                </AppShell>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={<Layout isDark={isDark} toggleColorScheme={toggleColorScheme} />}
+                    >
+                        <Route index element={<MainApp />} />
+                        <Route path="persons" element={<h4>Users</h4>} />
+                        <Route path="settings" element={<h4>settings</h4>} />
+
+                        {/* Using path="*"" means "match anything", so this route
+                                acts like a catch-all for URLs that we don't have explicit
+                                routes for. */}
+                        <Route path="*" element={<Error404 />} />
+                    </Route>
+                </Routes>
             </MantineProvider>
         </ColorSchemeProvider>
     )

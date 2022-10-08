@@ -4,6 +4,7 @@ import FluentAppGeneric24Regular from '~icons/fluent/app-generic-24-regular'
 import FluentSettings24Regular from '~icons/fluent/settings-24-regular'
 import FluentVideoPersonOff24Filled from '~icons/fluent/video-person-off-24-filled'
 import FluentPersonNote24Regular from '~icons/fluent/person-note-24-regular'
+import { Link } from 'react-router-dom'
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('icon')
@@ -73,9 +74,9 @@ const useStyles = createStyles((theme, _params, getRef) => {
 })
 
 const data = [
-    { link: '', label: 'Main app', icon: FluentAppGeneric24Regular },
-    { link: '', label: 'Persons', icon: FluentPersonNote24Regular },
-    { link: '', label: 'Settings', icon: FluentSettings24Regular },
+    { link: '/', label: 'Main app', icon: FluentAppGeneric24Regular },
+    { link: '/persons', label: 'Persons', icon: FluentPersonNote24Regular },
+    { link: '/settings', label: 'Settings', icon: FluentSettings24Regular },
 ]
 
 export function AppNavbar() {
@@ -83,18 +84,18 @@ export function AppNavbar() {
     const [active, setActive] = useState('Billing')
 
     const links = data.map(item => (
-        <a
+        <Link
+            to={item.link}
             className={cx(classes.link, { [classes.linkActive]: item.label === active })}
             href={item.link}
             key={item.label}
-            onClick={event => {
-                event.preventDefault()
+            onClick={() => {
                 setActive(item.label)
             }}
         >
             <item.icon className={classes.linkIcon} />
             <span>{item.label}</span>
-        </a>
+        </Link>
     ))
 
     return (

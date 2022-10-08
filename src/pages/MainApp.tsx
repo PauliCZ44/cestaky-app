@@ -25,7 +25,7 @@ interface FormValues {
     destinationEnd: string
     destinationStart: string
     rounding: string
-    backDrive: string[]
+    backDrive: boolean
 }
 
 const roundPrice = (price: number, rounding: number) => {
@@ -33,7 +33,7 @@ const roundPrice = (price: number, rounding: number) => {
     return Math.round(price / factor) * factor
 }
 
-export function AppContent() {
+export function MainApp() {
     const form = useForm<FormValues>({
         initialValues: {
             distance: undefined,
@@ -44,10 +44,13 @@ export function AppContent() {
             result: 'Kč 0,-',
             price: 4,
             rounding: '0',
-            backDrive: ['backDrive'],
+            backDrive: true,
         },
     })
 
+    const cols = useMediaLarger('xs') ? 2 : 1
+
+    const { distance, price, rounding, backDrive } = form.values
     useEffect(() => {
         console.log(form.values)
         const { distance, price, rounding, backDrive } = form.values
@@ -61,9 +64,8 @@ export function AppContent() {
         } else {
             form.setFieldValue('result', `...`)
         }
-    }, [form.values])
+    }, [distance, price, rounding, backDrive])
 
-    const cols = useMediaLarger('xs') ? 2 : 1
     return (
         <Box px="sm">
             <form onSubmit={form.onSubmit(values => console.log(values))}>

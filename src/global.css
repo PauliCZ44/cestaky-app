@@ -9,8 +9,10 @@ body,
 body,
 footer,
 header,
-.mantine-AppShell-body > * {
-    transition: background-color 500ms ease-in-out, color 250ms ease-in-out, border 250ms ease-in-out, box-shadow 250ms ease-in-out;
+.mantine-AppShell-body > *,
+input {
+    transition: background-color 500ms ease-in-out, color 250ms ease-in-out,
+        border 250ms ease-in-out, box-shadow 250ms ease-in-out;
 }
 
 svg {
