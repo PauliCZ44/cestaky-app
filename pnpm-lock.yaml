@@ -4,6 +4,7 @@ specifiers:
   '@emotion/react': ^11.10.4
   '@iconify-json/fluent': ^1.1.16
   '@iconify-json/fluent-emoji': ^1.1.1
+  '@iconify-json/logos': ^1.1.16
   '@mantine/core': 5.4.0
   '@mantine/dates': ^5.4.0
   '@mantine/form': ^5.4.0
@@ -33,6 +34,7 @@ specifiers:
 
 dependencies:
   '@emotion/react': 11.10.4_iapumuv4e6jcjznwuxpf4tt22e
+  '@iconify-json/logos': 1.1.16
   '@mantine/core': 5.4.0_pn5k5cxx4ixxsuzxwfgncrsx4y
   '@mantine/dates': 5.4.0_agnxxn4gdlpmzvqyxbks5w2vau
   '@mantine/form': 5.4.0_react@18.2.0
@@ -567,9 +569,14 @@ packages:
       '@iconify/types': 2.0.0
     dev: true
 
+  /@iconify-json/logos/1.1.16:
+    resolution: {integrity: sha512-ka6Irz4qNuk+RNDDVZEMTw3ceUk43FpBxReikswTrUXPlis6LgLZNyh9SV00SFeuBdT+A5gF45kJ124IxtOL5g==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: false
+
   /@iconify/types/2.0.0:
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
-    dev: true
 
   /@iconify/utils/2.0.0:
     resolution: {integrity: sha512-thvwZ6m3frWJiOYwRdHPSPGC25rmyvDl0vXdQ8ocRJZx31m8Pn4y7V1mTc5UReR6MiAj+hrV2UPZQjx7zI960g==}

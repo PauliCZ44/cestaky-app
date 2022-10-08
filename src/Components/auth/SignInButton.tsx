@@ -1,6 +1,7 @@
 import { Button, ButtonProps } from '@mantine/core'
 import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
 import { useAuth } from '../../lib/firebase'
+import { GoogleButton } from '../shared/GoogleButton'
 
 export const SignInButton = (props: ButtonProps) => {
     const handleClick = () => {
@@ -13,8 +14,8 @@ export const SignInButton = (props: ButtonProps) => {
     }
 
     return (
-        <Button onClick={handleClick} type="button" {...props}>
-            Sign In With Google
-        </Button>
+        <GoogleButton onClick={handleClick} type="button" {...props}>
+            {props.children}
+        </GoogleButton>
     )
 }

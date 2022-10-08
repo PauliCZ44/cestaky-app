@@ -10,6 +10,8 @@ import {
     Anchor,
     Box,
     Space,
+    Center,
+    Divider,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { Link } from 'react-router-dom'
@@ -26,23 +28,23 @@ const useStyles = createStyles(theme => ({
 interface FormValues {
     email: string
     password: string
-    keepMeLoggedIn: boolean
+    passwordAgain: string
 }
 
-export default function Login() {
+export default function Register() {
     const { classes } = useStyles()
     const form = useForm<FormValues>({
         initialValues: {
             email: '',
             password: '',
-            keepMeLoggedIn: false,
+            passwordAgain: '',
         },
     })
 
     return (
         <LogiWrapper>
             <Title order={2} className={classes.title} align="center" mt="md" mb={50}>
-                Welcome back to CestakyApp!
+                Register new user
             </Title>
 
             <TextInput
@@ -60,24 +62,34 @@ export default function Login() {
                 mt="md"
                 size="md"
             />
-            <Checkbox
-                name="keepMeLoggedIn"
-                label="Keep me logged in"
-                mt="xl"
+            <PasswordInput
+                {...form.getInputProps('password')}
+                name="passwordAgain"
+                label="Password again"
+                placeholder="Your password again"
+                mt="md"
                 size="md"
-                {...form.getInputProps('keepMeLoggedIn')}
             />
             <Button mt="xl" my="lg" fullWidth>
-                Login
+                Regsiter
             </Button>
-            {/* <SignInButton mt="xl" my="lg" fullWidth /> */}
 
-            <Text align="center" mt="lg">
-                Don&apos;t have an account? <br />
-                <Space h="md" />
-                <Link to="/register">
-                    <Anchor<'a'> weight={700} size="lg" pt="sm">
-                        Register
+            <Divider
+                label="Or continue with google account"
+                labelPosition="center"
+                my="xl"
+                py="md"
+            />
+
+            <Center>
+                <SignInButton>Sign Up with Google</SignInButton>
+            </Center>
+
+            <Text align="center" mt="xl">
+                Do you already have an account? <br />
+                <Link to="/login">
+                    <Anchor<'a'> weight={700} size="md">
+                        Go to login
                     </Anchor>
                 </Link>
             </Text>
