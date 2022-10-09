@@ -4,6 +4,7 @@ import Router from './Router'
 import { themeOverrides } from '../../themeOverrides'
 import { CustomFonts } from '../../utils/CustomFonts'
 import AuthShell from './AuthShell'
+import { AuthProvider } from '../contexts/UserContext'
 
 export default function App() {
     const preferredColorScheme = useColorScheme()
@@ -17,17 +18,19 @@ export default function App() {
         setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
     const isDark = colorScheme === 'dark'
     return (
-        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-            <MantineProvider
-                theme={{ colorScheme, ...themeOverrides }}
-                withGlobalStyles
-                withNormalizeCSS
-            >
-                <CustomFonts />
-                <AuthShell>
-                    <Router isDark={isDark} toggleColorScheme={toggleColorScheme} />
-                </AuthShell>
-            </MantineProvider>
-        </ColorSchemeProvider>
+        <AuthProvider>
+            <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+                <MantineProvider
+                    theme={{ colorScheme, ...themeOverrides }}
+                    withGlobalStyles
+                    withNormalizeCSS
+                >
+                    <CustomFonts />
+                    <AuthShell>
+                        <Router isDark={isDark} toggleColorScheme={toggleColorScheme} />
+                    </AuthShell>
+                </MantineProvider>
+            </ColorSchemeProvider>
+        </AuthProvider>
     )
 }

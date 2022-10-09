@@ -24,6 +24,10 @@ export default function Layout({ isDark, toggleColorScheme }: LayoutProps) {
                 '& nav': {
                     width: 'var(--mantine-navbar-width)',
                 },
+                '& main > div': {
+                    width: '100%',
+                    height: '100%',
+                },
             })}
             padding="md"
             fixed={false}

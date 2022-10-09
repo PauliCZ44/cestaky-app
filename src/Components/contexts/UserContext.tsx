@@ -58,6 +58,7 @@ const useSignIn = () => {
     return {
         signIn: (user: User) => {
             dispatch({ type: 'SIGN_IN', payload: { user } })
+            localStorage.setItem('userInfo', JSON.stringify(user))
         },
     }
 }
@@ -67,6 +68,7 @@ const useSignOut = () => {
     return {
         signOut: () => {
             dispatch({ type: 'SIGN_OUT' })
+            localStorage.removeItem('userInfo')
         },
     }
 }

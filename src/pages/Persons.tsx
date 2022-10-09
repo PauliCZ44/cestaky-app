@@ -2,23 +2,16 @@ import { Button, Group, SimpleGrid, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import React, { useState } from 'react'
 
-interface FormValues {
-    defaultStartDestination: string
-    address: string
+export interface Person {
     name: string
+    address: string
+    defaultStartDestination: string
 }
 
-type ButtonClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>
+interface FormValues extends Person {}
 
 export default function Persons() {
-    const [persons, setPersons] = useState([])
-    /*
-        // Input to add person. Save them to the local storage for now.
-        // Fields: name, adress, defaultStartDestination,
-
-        // List of persons
-        // can be deleted 
-    */
+    const [persons, setPersons] = useState<Person[]>([])
     const form = useForm<FormValues>({
         initialValues: {
             name: '',
@@ -30,9 +23,9 @@ export default function Persons() {
         },
     })
 
-    const handleSubmit = (event: ButtonClickEvent) => {
-        console.log(form.values)
-        setPersons([...persons, form.values])
+    const handleSubmit = (values: FormValues) => {
+        console.log(values)
+        setPersons([...persons, values])
     }
 
     return (

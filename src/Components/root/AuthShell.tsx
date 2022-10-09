@@ -7,13 +7,11 @@ import { setupFirebase } from '../../lib/firebase'
 interface AuthShellProps {
     children: ReactNode
 }
-
 function AuthShell(props: AuthShellProps) {
     const { signIn } = useSignIn()
     const { signOut } = useSignOut()
     useEffect(() => {
         setupFirebase()
-
         const auth = getAuth()
 
         onAuthStateChanged(auth, user => {

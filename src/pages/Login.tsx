@@ -12,9 +12,10 @@ import {
     Space,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { Link } from 'react-router-dom'
-import { SignInButton } from '../Components/auth/SignInButton'
 import LogiWrapper from '../Components/shared/loginWrapper'
+import { useAuth } from '../lib/firebase'
 
 const useStyles = createStyles(theme => ({
     title: {
@@ -39,37 +40,51 @@ export default function Login() {
         },
     })
 
+    const handleSubmit = async (formValues: FormValues) => {
+        console.log(formValues)
+        const auth = useAuth()
+        signInWithEmailAndPassword(auth, formValues.email, formValues.password)
+            .then(cred => {
+                console.log(cred)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
     return (
         <LogiWrapper>
             <Title order={2} className={classes.title} align="center" mt="md" mb={50}>
                 Welcome back to CestakyApp!
             </Title>
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+                <TextInput
+                    name="email"
+                    label="Email address"
+                    placeholder="hello@gmail.com"
+                    size="md"
+                    {...form.getInputProps('email')}
+                />
+                <PasswordInput
+                    {...form.getInputProps('password')}
+                    name="password"
+                    label="Password"
+                    placeholder="Your password"
+                    mt="md"
+                    size="md"
+                />
+                <Checkbox
+                    name="keepMeLoggedIn"
+                    label="Keep me logged in"
+                    mt="xl"
+                    size="md"
+                    {...form.getInputProps('keepMeLoggedIn')}
+                />
+                <Button mt="xl" my="lg" fullWidth type="submit">
+                    Login
+                </Button>
+            </form>
 
-            <TextInput
-                name="email"
-                label="Email address"
-                placeholder="hello@gmail.com"
-                size="md"
-                {...form.getInputProps('email')}
-            />
-            <PasswordInput
-                {...form.getInputProps('password')}
-                name="password"
-                label="Password"
-                placeholder="Your password"
-                mt="md"
-                size="md"
-            />
-            <Checkbox
-                name="keepMeLoggedIn"
-                label="Keep me logged in"
-                mt="xl"
-                size="md"
-                {...form.getInputProps('keepMeLoggedIn')}
-            />
-            <Button mt="xl" my="lg" fullWidth>
-                Login
-            </Button>
             {/* <SignInButton mt="xl" my="lg" fullWidth /> */}
 
             <Text align="center" mt="lg">

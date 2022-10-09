@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { createStyles, Navbar, Group, Code } from '@mantine/core'
 import FluentAppGeneric24Regular from '~icons/fluent/app-generic-24-regular'
 import FluentSettings24Regular from '~icons/fluent/settings-24-regular'
 import FluentVideoPersonOff24Filled from '~icons/fluent/video-person-off-24-filled'
 import FluentPersonNote24Regular from '~icons/fluent/person-note-24-regular'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../lib/firebase'
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('icon')
@@ -83,11 +84,15 @@ export function AppNavbar() {
     const { classes, cx } = useStyles()
     const [active, setActive] = useState('Billing')
 
+    const handleLogout = useCallback(() => {
+        const auth = useAuth()
+        auth.signOut()
+    }, [])
+
     const links = data.map(item => (
         <Link
             to={item.link}
             className={cx(classes.link, { [classes.linkActive]: item.label === active })}
-            href={item.link}
             key={item.label}
             onClick={() => {
                 setActive(item.label)
@@ -109,7 +114,7 @@ export function AppNavbar() {
             </Navbar.Section>
 
             <Navbar.Section className={classes.footer}>
-                <a href="#" className={classes.link} onClick={event => event.preventDefault()}>
+                <a href="#" className={classes.link} onClick={handleLogout}>
                     <FluentVideoPersonOff24Filled className={classes.linkIcon} />
                     <span>Logout</span>
                 </a>

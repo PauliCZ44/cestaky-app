@@ -1,8 +1,7 @@
 import { Button, ButtonProps } from '@mantine/core'
 import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
 import { useAuth } from '../../lib/firebase'
-import { GoogleButton } from '../shared/GoogleButton'
-
+import LogosGoogleIcon from '~icons/logos/google-icon'
 export const SignInButton = (props: ButtonProps) => {
     const handleClick = () => {
         const provider = new GoogleAuthProvider()
@@ -14,8 +13,14 @@ export const SignInButton = (props: ButtonProps) => {
     }
 
     return (
-        <GoogleButton onClick={handleClick} type="button" {...props}>
-            {props.children}
-        </GoogleButton>
+        <Button
+            onClick={handleClick}
+            type="button"
+            leftIcon={<LogosGoogleIcon />}
+            variant="default"
+            color="gray"
+            radius="xl"
+            {...props}
+        />
     )
 }
