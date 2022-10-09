@@ -8,7 +8,10 @@ import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import { connectStorageEmulator, getStorage } from 'firebase/storage'
 
 let firebaseApp: FirebaseApp
-const useEmulator = () => import.meta.env.VITE_USE_FIREBASE_EMULATOR
+let useEmulator: any = () => undefined
+if (window.location.hostname === 'localhost') {
+    // useEmulator = () => import.meta.env.VITE_USE_FIREBASE_EMULATOR
+}
 
 export const setupFirebase = () => {
     console.log('object :>> ', import.meta.env.VITE_FIREBASE_APIKEY)

@@ -15,7 +15,8 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { SignInButton } from '../Components/auth/SignInButton'
 import LogiWrapper from '../Components/shared/loginWrapper'
 import { useAuth } from '../lib/firebase'
@@ -35,6 +36,9 @@ interface FormValues {
 
 export default function Register() {
     const { classes } = useStyles()
+    const navigate = useNavigate()
+    const [errorMsg, setErrorMsg] = useState('')
+
     const form = useForm<FormValues>({
         initialValues: {
             email: '',
@@ -51,14 +55,11 @@ export default function Register() {
     })
 
     const handleSubmit = (formValues: FormValues) => {
-        console.log(formValues)
         const auth = useAuth()
         createUserWithEmailAndPassword(auth, formValues.email, formValues.password)
-            .then(cred => {
-                console.log('User created. Go to login', cred)
-            })
+            .then(() => navigate('/'))
             .catch(err => {
-                console.log('err :>> ', err)
+                setErrorMsg(err.message)
             })
     }
 
@@ -98,6 +99,11 @@ export default function Register() {
                 <Button mt="xl" my="lg" fullWidth type="submit">
                     Regsiter
                 </Button>
+                {errorMsg && (
+                    <Text weight={500} color="red">
+                        {errorMsg}
+                    </Text>
+                )}
             </form>
 
             <Divider

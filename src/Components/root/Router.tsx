@@ -2,12 +2,12 @@ import React, { lazy, ReactNode, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Layout from './Layout'
 import { useAuthState } from '../contexts/UserContext'
+import MainApp from '../../pages/MainApp'
+import Login from '../../pages/Login'
 
 const Error404 = lazy(() => import('../../pages/Error404'))
 const Persons = lazy(() => import('../../pages/Persons'))
-const MainApp = lazy(() => import('../../pages/MainApp'))
 const Register = lazy(() => import('../../pages/Register'))
-const Login = lazy(() => import('../../pages/Login'))
 
 interface RouterProps {
     children?: ReactNode
@@ -25,23 +25,26 @@ export default function Router({ isDark, toggleColorScheme }: RouterProps) {
     console.log('isLoggedIn', isLoggedIn)
     return (
         <Routes>
-            <Route
-                path="login"
-                element={
-                    <WithSuspense>
-                        <Login />
-                    </WithSuspense>
-                }
-            />
-            <Route
-                path="register"
-                element={
-                    <WithSuspense>
-                        <Register />
-                    </WithSuspense>
-                }
-            />
-
+            {!isLoggedIn && (
+                <Route
+                    path="login"
+                    element={
+                        <WithSuspense>
+                            <Login />
+                        </WithSuspense>
+                    }
+                />
+            )}
+            {!isLoggedIn && (
+                <Route
+                    path="register"
+                    element={
+                        <WithSuspense>
+                            <Register />
+                        </WithSuspense>
+                    }
+                />
+            )}
             <Route
                 path="/"
                 element={
@@ -52,14 +55,7 @@ export default function Router({ isDark, toggleColorScheme }: RouterProps) {
                     )
                 }
             >
-                <Route
-                    index
-                    element={
-                        <WithSuspense>
-                            <MainApp />
-                        </WithSuspense>
-                    }
-                />
+                <Route index element={<MainApp />} />
                 <Route
                     path="persons"
                     element={

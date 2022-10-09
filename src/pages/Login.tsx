@@ -13,7 +13,8 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import LogiWrapper from '../Components/shared/loginWrapper'
 import { useAuth } from '../lib/firebase'
 
@@ -31,6 +32,7 @@ interface FormValues {
 }
 
 export default function Login() {
+    const navigate = useNavigate()
     const { classes } = useStyles()
     const form = useForm<FormValues>({
         initialValues: {
@@ -40,15 +42,18 @@ export default function Login() {
         },
     })
 
+    const [errorMsg, setErrorMsg] = useState('')
+
     const handleSubmit = async (formValues: FormValues) => {
         console.log(formValues)
         const auth = useAuth()
         signInWithEmailAndPassword(auth, formValues.email, formValues.password)
-            .then(cred => {
-                console.log(cred)
+            .then(() => {
+                navigate('/')
             })
             .catch(err => {
                 console.log(err)
+                setErrorMsg('Wrong email or password')
             })
     }
 
@@ -72,6 +77,7 @@ export default function Login() {
                     placeholder="Your password"
                     mt="md"
                     size="md"
+                    error={errorMsg}
                 />
                 <Checkbox
                     name="keepMeLoggedIn"
