@@ -21,6 +21,7 @@ const WithSuspense = ({ children }: { children: ReactNode }) => (
 
 export default function Router({ isDark, toggleColorScheme }: RouterProps) {
     const { state } = useAuthState()
+    console.log(' state.state  :>> ', state.state)
     const isLoggedIn = state.state === 'SIGNED_IN'
     console.log('isLoggedIn', isLoggedIn)
     return (

@@ -82,7 +82,7 @@ const data = [
 
 export function AppNavbar() {
     const { classes, cx } = useStyles()
-    const [active, setActive] = useState('Billing')
+    const [active, setActive] = useState('Main app')
 
     const handleLogout = useCallback(() => {
         const auth = useAuth()
