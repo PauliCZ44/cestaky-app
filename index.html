@@ -123,18 +123,27 @@
       color: #fff;
       left: 15%;
     }
+
+    .loader--app {
+      opacity: 1;
+      background-color: #eff8ff;
+      transition: opacity 0.3s ease;
+      inset: 0;
+      position: fixed;
+      z-index: 999;
+    }
   </style>
 </head>
 
 <body>
-  <div id="loader">
-    <div className="wrapper">
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="shadow"></div>
-      <div className="shadow"></div>
-      <div className="shadow"></div>
+  <div id="loader" class="loader loader--app">
+    <div class="wrapper">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="shadow"></div>
+      <div class="shadow"></div>
+      <div class="shadow"></div>
     </div>
   </div>
   <div id="root"></div>

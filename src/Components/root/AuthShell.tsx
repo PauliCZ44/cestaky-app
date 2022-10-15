@@ -15,7 +15,14 @@ function AuthShell(props: AuthShellProps) {
         const auth = getAuth()
 
         onAuthStateChanged(auth, user => {
-            document.getElementById('loader')?.remove()
+            let loaderMain = document.getElementById('loader')
+            if (loaderMain) {
+                loaderMain.style.opacity = '0'
+                setTimeout(() => {
+                    loaderMain?.remove()
+                }, 300)
+            }
+
             if (user) {
                 signIn(user)
             } else {
