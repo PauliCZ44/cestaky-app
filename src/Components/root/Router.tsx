@@ -4,6 +4,7 @@ import Layout from './Layout'
 import { useAuthState } from '../contexts/UserContext'
 import MainApp from '../../pages/MainApp'
 import Login from '../../pages/Login'
+import Loader from '../shared/Loader'
 
 const Error404 = lazy(() => import('../../pages/Error404'))
 const Persons = lazy(() => import('../../pages/Persons'))
@@ -16,13 +17,14 @@ interface RouterProps {
 }
 
 const WithSuspense = ({ children }: { children: ReactNode }) => (
-    <Suspense fallback={<>Loading...</>}>{children}</Suspense>
+    <Suspense fallback={<Loader />}>{children}</Suspense>
 )
 
 export default function Router({ isDark, toggleColorScheme }: RouterProps) {
     const { state } = useAuthState()
     console.log(' state.state  :>> ', state.state)
     const isLoggedIn = state.state === 'SIGNED_IN'
+    const isUnknownLogin = state.state === 'UNKNOWN'
     console.log('isLoggedIn', isLoggedIn)
     return (
         <Routes>
@@ -49,7 +51,9 @@ export default function Router({ isDark, toggleColorScheme }: RouterProps) {
             <Route
                 path="/"
                 element={
-                    isLoggedIn ? (
+                    isUnknownLogin ? (
+                        <Loader />
+                    ) : isLoggedIn ? (
                         <Layout isDark={isDark} toggleColorScheme={toggleColorScheme} />
                     ) : (
                         <Login />

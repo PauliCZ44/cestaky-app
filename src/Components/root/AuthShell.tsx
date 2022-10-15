@@ -15,6 +15,7 @@ function AuthShell(props: AuthShellProps) {
         const auth = getAuth()
 
         onAuthStateChanged(auth, user => {
+            document.getElementById('loader')?.remove()
             if (user) {
                 signIn(user)
             } else {

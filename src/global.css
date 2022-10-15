@@ -8,6 +8,10 @@ main {
     overflow: auto;
 }
 
+main {
+    position: relative;
+}
+
 body,
 footer,
 header,

@@ -120,7 +120,7 @@ export default function Register() {
             <Text align="center" mt="xl">
                 Do you already have an account? <br />
                 <Link to="/login">
-                    <Anchor<'a'> weight={700} size="md">
+                    <Anchor<'span'> weight={700} size="md" component="span">
                         Go to login
                     </Anchor>
                 </Link>

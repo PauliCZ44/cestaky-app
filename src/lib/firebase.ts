@@ -14,7 +14,6 @@ if (window.location.hostname === 'localhost') {
 }
 
 export const setupFirebase = () => {
-    console.log('object :>> ', import.meta.env.VITE_FIREBASE_APIKEY)
     try {
         firebaseApp = initializeApp({
             apiKey: import.meta.env.VITE_FIREBASE_APIKEY,

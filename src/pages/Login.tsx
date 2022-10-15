@@ -8,7 +8,6 @@ import {
     Title,
     Text,
     Anchor,
-    Box,
     Space,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
@@ -97,7 +96,7 @@ export default function Login() {
                 Don&apos;t have an account? <br />
                 <Space h="md" />
                 <Link to="/register">
-                    <Anchor<'a'> weight={700} size="lg" pt="sm">
+                    <Anchor<'span'> weight={700} size="lg" pt="sm" component="span">
                         Register
                     </Anchor>
                 </Link>
