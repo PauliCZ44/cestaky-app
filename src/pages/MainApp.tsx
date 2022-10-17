@@ -1,4 +1,5 @@
 import {
+    Autocomplete,
     Box,
     Checkbox,
     Divider,
@@ -10,9 +11,12 @@ import {
 } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { useForm } from '@mantine/form'
-import { useEffect } from 'react'
+import { collection, getDocs } from 'firebase/firestore'
+import { useEffect, useState } from 'react'
 import FluentCalendarLtr24Regular from '~icons/fluent/calendar-ltr-24-regular'
+import { useAuth, useFirestore } from '../lib/firebase'
 import { useMediaLarger } from '../utils/mediaQueriesConsts'
+import { Person } from './Persons'
 interface FormValues {
     distance: number | undefined
     result: string
@@ -48,6 +52,21 @@ export default function MainApp() {
     const cols = useMediaLarger('xs') ? 2 : 1
 
     const { distance, price, rounding, backDrive } = form.values
+    const [persons, setPersons] = useState<Person[]>([])
+    const store = useFirestore()
+    const userId = useAuth().currentUser?.uid || ''
+
+    useEffect(() => {
+        getDocs(collection(store, 'userData', userId, 'persons')).then(docsSnap => {
+            console.log(
+                'docsSnap.docs.map(doc => doc.data().name as Person) :>> ',
+                docsSnap.docs.map(doc => doc.data().name as Person)
+            )
+            setPersons(docsSnap.docs.map(doc => doc.data().name as Person))
+        })
+        return
+    }, [])
+
     useEffect(() => {
         console.log(form.values)
         const { distance, price, rounding, backDrive } = form.values
@@ -65,7 +84,22 @@ export default function MainApp() {
 
     return (
         <form onSubmit={form.onSubmit(values => console.log(values))}>
-            <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
+            {JSON.stringify(persons)}
+            <SimpleGrid cols={cols} pt="1rem" pb="xl" spacing="md">
+                <Autocomplete
+                    withAsterisk
+                    label="Name of the driver"
+                    placeholder="Name"
+                    data={persons}
+                    {...form.getInputProps('name')}
+                />
+                <DatePicker
+                    icon={<FluentCalendarLtr24Regular />}
+                    placeholder="DD/MM/YYYY"
+                    label="Date of the drive"
+                    withAsterisk
+                    {...form.getInputProps('date')}
+                />
                 <TextInput
                     withAsterisk
                     label="Start destination"
@@ -80,16 +114,6 @@ export default function MainApp() {
                 />
                 <NumberInput
                     min={1}
-                    step={0.05}
-                    precision={2}
-                    stepHoldDelay={200}
-                    stepHoldInterval={100}
-                    withAsterisk
-                    label="Price per km in kč"
-                    {...form.getInputProps('price')}
-                />
-                <NumberInput
-                    min={1}
                     step={0.5}
                     precision={1}
                     stepHoldDelay={200}
@@ -99,18 +123,15 @@ export default function MainApp() {
                     placeholder="Km"
                     {...form.getInputProps('distance')}
                 />
-                <TextInput
+                <NumberInput
+                    min={1}
+                    step={0.05}
+                    precision={2}
+                    stepHoldDelay={200}
+                    stepHoldInterval={100}
                     withAsterisk
-                    label="Name of the driver"
-                    placeholder="Name"
-                    {...form.getInputProps('name')}
-                />
-                <DatePicker
-                    icon={<FluentCalendarLtr24Regular />}
-                    placeholder="DD/MM/YYYY"
-                    label="Date of the drive"
-                    withAsterisk
-                    {...form.getInputProps('date')}
+                    label="Price per km in kč"
+                    {...form.getInputProps('price')}
                 />
             </SimpleGrid>
             <Divider></Divider>

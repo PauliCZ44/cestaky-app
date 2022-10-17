@@ -11,4 +11,11 @@ export const themeOverrides: MantineThemeOverride = {
             'Passion One, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji',
     },
     cursorType: 'pointer',
+    spacing: {
+        xs: 4,
+        sm: 8,
+        md: 12,
+        lg: 18,
+        xl: 26,
+    },
 }
