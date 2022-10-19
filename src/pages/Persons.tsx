@@ -13,9 +13,12 @@ import { useForm } from '@mantine/form'
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAuth, useFirestore } from '../lib/firebase'
-// import FluentEdit28Regular from '~icons/fluent/edit-28-regular'
-// import FluentSave28Regular from '~icons/fluent/save-28-regular'
+import FluentEdit28Regular from '~icons/fluent/edit-28-regular'
 import FluentDelete28Regular from '~icons/fluent/delete-28-regular'
+import EditPersonModal from '../Components/shared/EditPersonModal'
+import { hideNotification, showNotification } from '@mantine/notifications'
+import FluentArrowUndo28Regular from '~icons/fluent/arrow-undo-28-regular'
+import FluentArrowUndo28Filled from '~icons/fluent/arrow-undo-28-filled'
 
 export interface Person {
     name: string
@@ -29,7 +32,9 @@ export default function Persons() {
     const store = useFirestore()
     const userId = useAuth().currentUser?.uid || ''
     const colRef = useRef(collection(store, 'userData', userId, 'persons'))
-    const [editMode, setEditMode] = useState(false)
+    //TODO: add edit mode?
+    const [selectedPerson, setSelectedPerson] = useState<Person | null>(null)
+    const [isModalOpen, setModalOpen] = useState(false)
 
     useEffect(() => {
         getDocs(colRef.current).then(docsSnap => {
@@ -51,7 +56,29 @@ export default function Persons() {
     })
 
     const handleDelete = async (id: string) => {
-        await deleteDoc(doc(store, 'userData', userId, 'persons', id))
+        const prevPersons = [...persons]
+        const timeOut = setTimeout(async () => {
+            await deleteDoc(doc(store, 'userData', userId, 'persons', id))
+        }, 3000)
+
+        showNotification({
+            id: id,
+            title: 'Item will be deleted',
+            message: 'Undo by clicking on the icon',
+            autoClose: 3000,
+            icon: (
+                <ActionIcon
+                    variant="filled"
+                    onClick={() => {
+                        clearTimeout(timeOut)
+                        setPersons(prevPersons)
+                        hideNotification(id)
+                    }}
+                >
+                    <FluentArrowUndo28Filled />
+                </ActionIcon>
+            ),
+        })
         setPersons(persons.filter(person => person.id !== id))
     }
 
@@ -60,7 +87,11 @@ export default function Persons() {
             person => person.name.toLowerCase().trim() === values.name.toLowerCase().trim()
         )
         if (userExists) {
-            alert('User with this name already exists')
+            showNotification({
+                color: 'yellow',
+                title: 'Error',
+                message: 'Please choose a different name',
+            })
             return
         }
         try {
@@ -87,20 +118,25 @@ export default function Persons() {
                     </td>
 
                     <td>
-                        <Text size="sm" weight={500}>
+                        <Text size="sm" weight={400}>
                             {person.address}
                         </Text>
                     </td>
                     <td>
-                        <Text size="sm" weight={500}>
+                        <Text size="sm" weight={400}>
                             {person.defaultStartDestination}
                         </Text>
                     </td>
                     <td>
                         <Group spacing={0} position="right">
-                            {/* <ActionIcon>
-                                {editMode ? <FluentEdit28Regular /> : <FluentSave28Regular />}
-                            </ActionIcon> */}
+                            <ActionIcon
+                                onClick={() => {
+                                    setSelectedPerson(person)
+                                    setModalOpen(true)
+                                }}
+                            >
+                                <FluentEdit28Regular />
+                            </ActionIcon>
                             <ActionIcon color="red" onClick={() => handleDelete(person.id!)}>
                                 <FluentDelete28Regular />
                             </ActionIcon>
@@ -135,7 +171,7 @@ export default function Persons() {
                                 {...form.getInputProps('defaultStartDestination')}
                             />
                             <Button type="submit" mt="sm">
-                                ADD
+                                Add
                             </Button>
                         </SimpleGrid>
                     </form>
@@ -159,6 +195,18 @@ export default function Persons() {
                     </ScrollArea>
                 </div>
             </SimpleGrid>
+
+            {selectedPerson && (
+                <EditPersonModal
+                    setPersons={setPersons}
+                    key={selectedPerson?.id}
+                    isOpen={isModalOpen}
+                    person={selectedPerson}
+                    onClose={() => {
+                        setModalOpen(false)
+                    }}
+                />
+            )}
         </>
     )
 }

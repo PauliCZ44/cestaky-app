@@ -24,3 +24,11 @@ input {
 svg {
     font-size: 1.25rem;
 }
+
+.mantine-Notification-root::before {
+    left: -2px;
+    top: -1px;
+    bottom: -1px;
+    width: 8px;
+    border-radius: 4px 0 0 4px;
+}

@@ -5,6 +5,7 @@ import { themeOverrides } from '../../themeOverrides'
 import { CustomFonts } from '../../utils/CustomFonts'
 import AuthShell from './AuthShell'
 import { AuthProvider } from '../contexts/UserContext'
+import { NotificationsProvider } from '@mantine/notifications'
 
 export default function App() {
     const preferredColorScheme = useColorScheme()
@@ -25,10 +26,12 @@ export default function App() {
                     withGlobalStyles
                     withNormalizeCSS
                 >
-                    <CustomFonts />
-                    <AuthShell>
-                        <Router isDark={isDark} toggleColorScheme={toggleColorScheme} />
-                    </AuthShell>
+                    <NotificationsProvider>
+                        <CustomFonts />
+                        <AuthShell>
+                            <Router isDark={isDark} toggleColorScheme={toggleColorScheme} />
+                        </AuthShell>
+                    </NotificationsProvider>
                 </MantineProvider>
             </ColorSchemeProvider>
         </AuthProvider>

@@ -3,20 +3,24 @@ import {
     Box,
     Checkbox,
     Divider,
+    Group,
     Input,
     NumberInput,
     Radio,
     SimpleGrid,
+    Text,
     TextInput,
 } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { useForm } from '@mantine/form'
-import { collection, getDocs } from 'firebase/firestore'
-import { useEffect, useState } from 'react'
+import { collection, doc, getDocs } from 'firebase/firestore'
+import { forwardRef, useEffect, useMemo, useState } from 'react'
 import FluentCalendarLtr24Regular from '~icons/fluent/calendar-ltr-24-regular'
 import { useAuth, useFirestore } from '../lib/firebase'
 import { useMediaLarger } from '../utils/mediaQueriesConsts'
 import { Person } from './Persons'
+import { showNotification } from '@mantine/notifications'
+import { AutoCompleteItem } from '../Components/shared/PersonSelectItem'
 interface FormValues {
     distance: number | undefined
     result: string
@@ -41,7 +45,8 @@ export default function MainApp() {
             name: '',
             destinationEnd: '',
             destinationStart: 'Prlov',
-            date: null,
+            // Todays date
+            date: new Date(),
             result: 'Kč 0,-',
             price: 4,
             rounding: '0',
@@ -58,11 +63,7 @@ export default function MainApp() {
 
     useEffect(() => {
         getDocs(collection(store, 'userData', userId, 'persons')).then(docsSnap => {
-            console.log(
-                'docsSnap.docs.map(doc => doc.data().name as Person) :>> ',
-                docsSnap.docs.map(doc => doc.data().name as Person)
-            )
-            setPersons(docsSnap.docs.map(doc => doc.data().name as Person))
+            setPersons(docsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id } as Person)))
         })
         return
     }, [])
@@ -82,15 +83,36 @@ export default function MainApp() {
         }
     }, [distance, price, rounding, backDrive])
 
+    const handleAutocompleteConfirm = (value: Person) => {
+        form.setFieldValue('name', value.name)
+        form.setFieldValue('destinationStart', value.defaultStartDestination)
+        showNotification({
+            title: `${value.name} selected.`,
+            message: `Default start destination set to ${value.defaultStartDestination}`,
+            autoClose: 2500,
+        })
+    }
+
+    const autocompleteData = useMemo(
+        () => persons.map(item => ({ ...item, value: item.name })),
+        [persons]
+    )
+
     return (
         <form onSubmit={form.onSubmit(values => console.log(values))}>
-            {JSON.stringify(persons)}
             <SimpleGrid cols={cols} pt="1rem" pb="xl" spacing="md">
                 <Autocomplete
+                    transitionDuration={100}
+                    transition="fade"
                     withAsterisk
                     label="Name of the driver"
                     placeholder="Name"
-                    data={persons}
+                    data={autocompleteData}
+                    onItemSubmit={handleAutocompleteConfirm}
+                    itemComponent={AutoCompleteItem}
+                    filter={(value, item) =>
+                        item.value.toLowerCase().includes(value.toLowerCase().trim())
+                    }
                     {...form.getInputProps('name')}
                 />
                 <DatePicker
