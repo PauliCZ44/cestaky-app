@@ -27,7 +27,6 @@ export default function Router({ isDark, toggleColorScheme }: RouterProps) {
     console.log(' state.state  :>> ', state.state)
     const isLoggedIn = state.state === 'SIGNED_IN'
     const isUnknownLogin = state.state === 'UNKNOWN'
-    console.log('isLoggedIn', isLoggedIn)
     return (
         <Routes>
             {!isLoggedIn && (

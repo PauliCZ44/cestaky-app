@@ -3,26 +3,25 @@ import {
     Box,
     Checkbox,
     Divider,
-    Group,
     Input,
-    LoadingOverlay,
     NumberInput,
     Radio,
     SimpleGrid,
-    Text,
     TextInput,
     Title,
 } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { useForm } from '@mantine/form'
-import { collection, doc, getDocs } from 'firebase/firestore'
-import { forwardRef, useEffect, useMemo, useState } from 'react'
+import { showNotification } from '@mantine/notifications'
+import { collection, getDocs } from 'firebase/firestore'
+import { useAtom } from 'jotai'
+import { useEffect, useMemo, useState } from 'react'
 import FluentCalendarLtr24Regular from '~icons/fluent/calendar-ltr-24-regular'
+import { AutoCompleteItem } from '../Components/shared/PersonSelectItem'
 import { useAuth, useFirestore } from '../lib/firebase'
+import { userSettingsAtom } from '../store'
 import { useMediaLarger } from '../utils/mediaQueriesConsts'
 import { Person } from './Persons'
-import { showNotification } from '@mantine/notifications'
-import { AutoCompleteItem } from '../Components/shared/PersonSelectItem'
 interface FormValues {
     distance: number | undefined
     result: string
@@ -41,51 +40,36 @@ const roundPrice = (price: number, rounding: number) => {
 }
 
 export default function MainApp() {
+    const [userSettings, setUserSettings] = useAtom(userSettingsAtom)
+
     const form = useForm<FormValues>({
         initialValues: {
             distance: undefined,
             name: '',
             destinationEnd: '',
-            destinationStart: '',
+            destinationStart: userSettings.defaultStartDestination,
             // Todays date
             date: new Date(),
             result: 'Kč 0,-',
-            price: undefined,
-            rounding: '0',
-            backDrive: true,
+            price: userSettings.defaultPrice,
+            rounding: userSettings.rounding,
+            backDrive: userSettings.backDrive,
         },
     })
-    const [isOverlayVisible, setOverlayVisible] = useState(true)
     const cols = useMediaLarger('xs') ? 2 : 1
-
     const { distance, price, rounding, backDrive } = form.values
     const [persons, setPersons] = useState<Person[]>([])
     const store = useFirestore()
     const userId = useAuth().currentUser?.uid || ''
 
     useEffect(() => {
-        setOverlayVisible(true)
         getDocs(collection(store, 'userData', userId, 'persons')).then(docsSnap => {
             setPersons(docsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id } as Person)))
         })
-
-        getDocs(collection(store, 'userData', userId, 'settings')).then(docsSnap => {
-            const data = docsSnap.docs[0]?.data()
-            form.setValues({
-                ...form.values,
-                destinationStart: data?.defaultStartDestination || '',
-                rounding: data?.rounding || '0',
-                backDrive: data?.backDrive || true,
-                price: data?.defaultPrice || 4,
-            })
-            setOverlayVisible(false)
-        })
-
         return
     }, [])
 
     useEffect(() => {
-        console.log(form.values)
         const { distance, price, rounding, backDrive } = form.values
         if (distance && price) {
             let res = roundPrice(distance * price * (backDrive ? 2 : 1), parseInt(rounding))
@@ -122,7 +106,6 @@ export default function MainApp() {
                 className="position-relative"
             >
                 <SimpleGrid cols={cols} pt="1rem" pb="xl" spacing="md">
-                    <LoadingOverlay visible={isOverlayVisible} overlayBlur={1} />
                     <Autocomplete
                         transitionDuration={100}
                         transition="fade"

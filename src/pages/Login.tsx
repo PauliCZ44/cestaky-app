@@ -11,7 +11,8 @@ import {
     Space,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { showNotification } from '@mantine/notifications'
+import { signInWithEmailAndPassword, signInAnonymously } from 'firebase/auth'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import LogiWrapper from '../Components/shared/loginWrapper'
@@ -49,10 +50,34 @@ export default function Login() {
         signInWithEmailAndPassword(auth, formValues.email, formValues.password)
             .then(() => {
                 navigate('/')
+                showNotification({
+                    autoClose: 4000,
+                    color: 'green',
+                    title: 'Success login',
+                    message: `Logged in as ${formValues.email}`,
+                })
             })
             .catch(err => {
                 console.log(err)
                 setErrorMsg('Wrong email or password')
+            })
+    }
+
+    const handleAnonymousLogin = async () => {
+        const auth = useAuth()
+        signInAnonymously(auth)
+            .then(() => {
+                navigate('/')
+                showNotification({
+                    autoClose: 4000,
+                    color: 'yellow',
+                    title: 'Success login',
+                    message:
+                        'You are now logged in. Your data will not be stored and will be removed after logout 😥.',
+                })
+            })
+            .catch(err => {
+                console.log(err)
             })
     }
 
@@ -101,6 +126,10 @@ export default function Login() {
                     </Anchor>
                 </Link>
             </Text>
+
+            <Button mt="xl" my="lg" fullWidth variant="default" onClick={handleAnonymousLogin}>
+                Take a look without login 🐱‍👤
+            </Button>
         </LogiWrapper>
     )
 }

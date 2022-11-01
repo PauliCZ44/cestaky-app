@@ -1,64 +1,37 @@
-import {
-    Button,
-    Checkbox,
-    Input,
-    LoadingOverlay,
-    NumberInput,
-    Radio,
-    SimpleGrid,
-    TextInput,
-    Title,
-} from '@mantine/core'
+import { Checkbox, Input, NumberInput, Radio, SimpleGrid, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { useEffect, useRef, useState } from 'react'
-import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
-import { useAuth, useFirestore } from '../lib/firebase'
 import { showNotification } from '@mantine/notifications'
+import { addDoc, collection } from 'firebase/firestore'
+import { useAtom } from 'jotai'
+import { useRef, useState } from 'react'
 import SaveButton from '../Components/shared/SaveButton'
+import { useAuth, useFirestore } from '../lib/firebase'
+import { userSettingsAtom } from '../store'
 export interface IUserSettings {
     defaultStartDestination: string
-    rounding: string | null
+    rounding: string
     backDrive: boolean
     defaultPrice: number
 }
 
 export default function Settings() {
+    const [userSettings, setUserSettings] = useAtom(userSettingsAtom)
     const form = useForm<IUserSettings>({
-        initialValues: {
-            defaultStartDestination: '',
-            rounding: null,
-            backDrive: true,
-            defaultPrice: 4,
-        },
+        initialValues: userSettings,
     })
     const [isLoading, setisLoading] = useState(false)
-    const [isOverlayVisible, setOverlayVisible] = useState(true)
 
     const store = useFirestore()
     const userId = useAuth().currentUser?.uid || ''
     const colRef = useRef(collection(store, 'userData', userId, 'settings'))
 
-    useEffect(() => {
-        setOverlayVisible(true)
-        getDocs(colRef.current).then(docsSnap => {
-            const data = docsSnap.docs[0]?.data()
-            form.setValues({
-                defaultStartDestination: data?.defaultStartDestination || '',
-                rounding: data?.rounding || '0',
-                backDrive: data?.backDrive || true,
-                defaultPrice: data?.defaultPrice || 4,
-            })
-            setOverlayVisible(false)
-        })
-    }, [])
-
     const handleSubmit = async (values: IUserSettings) => {
         setisLoading(true)
         try {
-            //delete id from values
             await addDoc(colRef.current, {
                 ...values,
             })
+            setUserSettings(values)
             showNotification({
                 color: 'green',
                 title: `Success`,
@@ -83,7 +56,6 @@ export default function Settings() {
                     spacing="xl"
                     sx={{ maxWidth: '500px', position: 'relative' }}
                 >
-                    <LoadingOverlay visible={isOverlayVisible} overlayBlur={1} />
                     <TextInput
                         description="Applied if no person is selected or person do not have default start destination"
                         label="Default start destination"
