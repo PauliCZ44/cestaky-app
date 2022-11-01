@@ -1,5 +1,6 @@
 import {
     ActionIcon,
+    Box,
     Button,
     Group,
     ScrollArea,
@@ -149,8 +150,8 @@ export default function Persons() {
 
     return (
         <>
-            <SimpleGrid cols={1} pt="1rem" spacing="xl">
-                <div>
+            <SimpleGrid cols={1} spacing="xl">
+                <Box sx={{ maxWidth: '500px' }}>
                     <Title order={2}>Add new person</Title>
                     <form onSubmit={form.onSubmit(handleSubmit)}>
                         <SimpleGrid spacing="xs">
@@ -175,7 +176,7 @@ export default function Persons() {
                             </Button>
                         </SimpleGrid>
                     </form>
-                </div>
+                </Box>
                 <div>
                     <Title order={2} mb="md">
                         Person list

@@ -5,11 +5,13 @@ import {
     Divider,
     Group,
     Input,
+    LoadingOverlay,
     NumberInput,
     Radio,
     SimpleGrid,
     Text,
     TextInput,
+    Title,
 } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { useForm } from '@mantine/form'
@@ -44,16 +46,16 @@ export default function MainApp() {
             distance: undefined,
             name: '',
             destinationEnd: '',
-            destinationStart: 'Prlov',
+            destinationStart: '',
             // Todays date
             date: new Date(),
             result: 'Kč 0,-',
-            price: 4,
+            price: undefined,
             rounding: '0',
             backDrive: true,
         },
     })
-
+    const [isOverlayVisible, setOverlayVisible] = useState(true)
     const cols = useMediaLarger('xs') ? 2 : 1
 
     const { distance, price, rounding, backDrive } = form.values
@@ -62,9 +64,23 @@ export default function MainApp() {
     const userId = useAuth().currentUser?.uid || ''
 
     useEffect(() => {
+        setOverlayVisible(true)
         getDocs(collection(store, 'userData', userId, 'persons')).then(docsSnap => {
             setPersons(docsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id } as Person)))
         })
+
+        getDocs(collection(store, 'userData', userId, 'settings')).then(docsSnap => {
+            const data = docsSnap.docs[0]?.data()
+            form.setValues({
+                ...form.values,
+                destinationStart: data?.defaultStartDestination || '',
+                rounding: data?.rounding || '0',
+                backDrive: data?.backDrive || true,
+                price: data?.defaultPrice || 4,
+            })
+            setOverlayVisible(false)
+        })
+
         return
     }, [])
 
@@ -99,92 +115,99 @@ export default function MainApp() {
     )
 
     return (
-        <form onSubmit={form.onSubmit(values => console.log(values))}>
-            <SimpleGrid cols={cols} pt="1rem" pb="xl" spacing="md">
-                <Autocomplete
-                    transitionDuration={100}
-                    transition="fade"
-                    withAsterisk
-                    label="Name of the driver"
-                    placeholder="Name"
-                    data={autocompleteData}
-                    onItemSubmit={handleAutocompleteConfirm}
-                    itemComponent={AutoCompleteItem}
-                    filter={(value, item) =>
-                        item.value.toLowerCase().includes(value.toLowerCase().trim())
-                    }
-                    {...form.getInputProps('name')}
-                />
-                <DatePicker
-                    icon={<FluentCalendarLtr24Regular />}
-                    placeholder="DD/MM/YYYY"
-                    label="Date of the drive"
-                    withAsterisk
-                    {...form.getInputProps('date')}
-                />
-                <TextInput
-                    withAsterisk
-                    label="Start destination"
-                    placeholder="Search..."
-                    {...form.getInputProps('destinationStart')}
-                />
-                <TextInput
-                    withAsterisk
-                    label="End destination"
-                    placeholder="Search..."
-                    {...form.getInputProps('destinationEnd')}
-                />
-                <NumberInput
-                    min={1}
-                    step={0.5}
-                    precision={1}
-                    stepHoldDelay={200}
-                    stepHoldInterval={100}
-                    withAsterisk
-                    label="Distance"
-                    placeholder="Km"
-                    {...form.getInputProps('distance')}
-                />
-                <NumberInput
-                    min={1}
-                    step={0.05}
-                    precision={2}
-                    stepHoldDelay={200}
-                    stepHoldInterval={100}
-                    withAsterisk
-                    label="Price per km in kč"
-                    {...form.getInputProps('price')}
-                />
-            </SimpleGrid>
-            <Divider></Divider>
-            <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
-                <Box
-                    sx={theme => ({
-                        display: 'flex',
-                        flexDirection: 'row',
-                        gap: theme.spacing.lg,
-                        flexWrap: 'wrap',
-                    })}
-                >
-                    <Radio.Group
-                        mr="lg"
-                        name="rounding"
-                        label="Round the result to decimal places"
-                        {...form.getInputProps('rounding')}
+        <>
+            <Title order={2}>Calculator</Title>
+            <form
+                onSubmit={form.onSubmit(values => console.log(values))}
+                className="position-relative"
+            >
+                <SimpleGrid cols={cols} pt="1rem" pb="xl" spacing="md">
+                    <LoadingOverlay visible={isOverlayVisible} overlayBlur={1} />
+                    <Autocomplete
+                        transitionDuration={100}
+                        transition="fade"
+                        withAsterisk
+                        label="Name of the driver"
+                        placeholder="Name"
+                        data={autocompleteData}
+                        onItemSubmit={handleAutocompleteConfirm}
+                        itemComponent={AutoCompleteItem}
+                        filter={(value, item) =>
+                            item.value.toLowerCase().includes(value.toLowerCase().trim())
+                        }
+                        {...form.getInputProps('name')}
+                    />
+                    <DatePicker
+                        icon={<FluentCalendarLtr24Regular />}
+                        placeholder="DD/MM/YYYY"
+                        label="Date of the drive"
+                        withAsterisk
+                        {...form.getInputProps('date')}
+                    />
+                    <TextInput
+                        withAsterisk
+                        label="Start destination"
+                        placeholder="Search..."
+                        {...form.getInputProps('destinationStart')}
+                    />
+                    <TextInput
+                        withAsterisk
+                        label="End destination"
+                        placeholder="Search..."
+                        {...form.getInputProps('destinationEnd')}
+                    />
+                    <NumberInput
+                        min={1}
+                        step={0.5}
+                        precision={1}
+                        stepHoldDelay={200}
+                        stepHoldInterval={100}
+                        withAsterisk
+                        label="Distance"
+                        placeholder="Km"
+                        {...form.getInputProps('distance')}
+                    />
+                    <NumberInput
+                        min={1}
+                        step={0.05}
+                        precision={2}
+                        stepHoldDelay={200}
+                        stepHoldInterval={100}
+                        withAsterisk
+                        label="Price per km in kč"
+                        {...form.getInputProps('price')}
+                    />
+                </SimpleGrid>
+                <Divider></Divider>
+                <SimpleGrid cols={cols} pt="1rem" pb="3rem" spacing="xl">
+                    <Box
+                        sx={theme => ({
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: theme.spacing.lg,
+                            flexWrap: 'wrap',
+                        })}
                     >
-                        <Radio value="0" label="No rounding" />
-                        <Radio value="1" label="10s" />
-                        <Radio value="2" label="100s" />
-                    </Radio.Group>
-                    <Input.Wrapper label="Include drive back">
-                        <Checkbox
-                            pt={10}
-                            {...form.getInputProps('backDrive', { type: 'checkbox' })}
-                        />
-                    </Input.Wrapper>
-                </Box>
-                <TextInput label="Result in Kč" readOnly {...form.getInputProps('result')} />
-            </SimpleGrid>
-        </form>
+                        <Radio.Group
+                            mr="lg"
+                            name="rounding"
+                            label="Round the result to decimal places"
+                            {...form.getInputProps('rounding')}
+                        >
+                            <Radio value="0" label="No rounding" />
+                            <Radio value="1" label="10s" />
+                            <Radio value="2" label="100s" />
+                        </Radio.Group>
+                        <Input.Wrapper label="Include drive back">
+                            <Checkbox
+                                pt={10}
+                                {...form.getInputProps('backDrive', { type: 'checkbox' })}
+                            />
+                        </Input.Wrapper>
+                    </Box>
+                    <TextInput label="Result in Kč" readOnly {...form.getInputProps('result')} />
+                </SimpleGrid>
+            </form>
+        </>
     )
 }

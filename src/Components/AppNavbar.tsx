@@ -47,6 +47,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
                 },
             },
             [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+                justifyContent: 'center',
                 '> span': {
                     display: 'none',
                 },

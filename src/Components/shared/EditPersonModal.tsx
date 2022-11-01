@@ -2,10 +2,10 @@ import { Button, Group, LoadingOverlay, Modal, SimpleGrid, TextInput, Title } fr
 import { useForm } from '@mantine/form'
 import { doc, setDoc } from 'firebase/firestore'
 import { useAuth, useFirestore } from '../../lib/firebase'
-import FluentSave28Regular from '~icons/fluent/save-28-regular'
 import { Person } from '../../pages'
 import { showNotification } from '@mantine/notifications'
 import { useState } from 'react'
+import SaveButton from './SaveButton'
 
 interface EditPersonModalProps {
     isOpen: boolean
@@ -85,9 +85,7 @@ function EditPersonModal({ isOpen, person, onClose, onSubmit, setPersons }: Edit
                             <Button onClick={onClose} mt="sm" variant="outline">
                                 Cancel
                             </Button>
-                            <Button leftIcon={<FluentSave28Regular />} type="submit" mt="sm">
-                                Save
-                            </Button>
+                            <SaveButton mt="sm">Save</SaveButton>
                         </Group>
                     </SimpleGrid>
                 </form>

@@ -5,6 +5,8 @@ import { useAuthState } from '../contexts/UserContext'
 import MainApp from '../../pages/MainApp'
 import Login from '../../pages/Login'
 import Loader from '../shared/Loader'
+import Settings from '../../pages/Settings'
+import StoreProvider from './StoreProvider'
 
 const Error404 = lazy(() => import('../../pages/Error404'))
 const Persons = lazy(() => import('../../pages/Persons'))
@@ -54,7 +56,9 @@ export default function Router({ isDark, toggleColorScheme }: RouterProps) {
                     isUnknownLogin ? (
                         <Loader />
                     ) : isLoggedIn ? (
-                        <Layout isDark={isDark} toggleColorScheme={toggleColorScheme} />
+                        <StoreProvider>
+                            <Layout isDark={isDark} toggleColorScheme={toggleColorScheme} />
+                        </StoreProvider>
                     ) : (
                         <Login />
                     )
@@ -69,7 +73,7 @@ export default function Router({ isDark, toggleColorScheme }: RouterProps) {
                         </WithSuspense>
                     }
                 />
-                <Route path="settings" element={<h4>settings</h4>} />
+                <Route path="settings" element={<Settings />} />
                 <Route
                     path="*"
                     element={
