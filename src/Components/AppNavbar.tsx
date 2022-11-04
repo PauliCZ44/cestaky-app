@@ -4,20 +4,13 @@ import FluentAppGeneric24Regular from '~icons/fluent/app-generic-24-regular'
 import FluentSettings24Regular from '~icons/fluent/settings-24-regular'
 import FluentVideoPersonOff24Filled from '~icons/fluent/video-person-off-24-filled'
 import FluentPersonNote24Regular from '~icons/fluent/person-note-24-regular'
+import FluentWalletCreditCard20Filled from '~icons/fluent/wallet-credit-card-20-filled'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/firebase'
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('icon')
     return {
-        header: {
-            paddingBottom: theme.spacing.md,
-            marginBottom: theme.spacing.md * 1.5,
-            borderBottom: `1px solid ${
-                theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
-            }`,
-        },
-
         footer: {
             paddingTop: theme.spacing.md,
             marginTop: theme.spacing.md,
@@ -72,6 +65,9 @@ const useStyles = createStyles((theme, _params, getRef) => {
                 },
             },
         },
+        logo: {
+            color: theme.colors.gray[6],
+        },
     }
 })
 
@@ -106,13 +102,7 @@ export function AppNavbar() {
 
     return (
         <Navbar height={'100%'} p="md">
-            <Navbar.Section grow>
-                <Group className={classes.header} position="apart">
-                    LOGO
-                    <Code sx={{ fontWeight: 700 }}>v3.1.2</Code>
-                </Group>
-                {links}
-            </Navbar.Section>
+            <Navbar.Section grow>{links}</Navbar.Section>
 
             <Navbar.Section className={classes.footer}>
                 <a href="#" className={classes.link} onClick={handleLogout}>

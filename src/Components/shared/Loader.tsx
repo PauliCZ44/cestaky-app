@@ -3,8 +3,8 @@ import React from 'react'
 
 export default function Loader() {
     return (
-        <div className="loader-inner">
-            <div className="wrapper">
+        <div className="loader-inner" style={{ height: '100%' }}>
+            <div className="loader-wrapper">
                 <div className="circle"></div>
                 <div className="circle"></div>
                 <div className="circle"></div>

@@ -15,11 +15,13 @@ import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { collection, getDocs } from 'firebase/firestore'
 import { useAtom } from 'jotai'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import FluentCalendarLtr24Regular from '~icons/fluent/calendar-ltr-24-regular'
+import { SerachPlaceInput } from '../Components/serachPlaceInput'
 import { AutoCompleteItem } from '../Components/shared/PersonSelectItem'
 import { useAuth, useFirestore } from '../lib/firebase'
 import { userSettingsAtom } from '../store'
+import { createDirectionRequest } from '../utils/constants'
 import { useMediaLarger } from '../utils/mediaQueriesConsts'
 import { Person } from './Persons'
 interface FormValues {
@@ -40,8 +42,9 @@ const roundPrice = (price: number, rounding: number) => {
 }
 
 export default function MainApp() {
-    const [userSettings, setUserSettings] = useAtom(userSettingsAtom)
-
+    const [userSettings] = useAtom(userSettingsAtom)
+    const [startPlaceCoords, setStartPlaceCoords] = useState<any[] | null>()
+    const [endPlaceCoords, setEndPlaceCoords] = useState<any[] | null>()
     const form = useForm<FormValues>({
         initialValues: {
             distance: undefined,
@@ -70,6 +73,24 @@ export default function MainApp() {
     }, [])
 
     useEffect(() => {
+        console.log(startPlaceCoords, endPlaceCoords, 'eff')
+        if (startPlaceCoords && endPlaceCoords) {
+            fetch(createDirectionRequest(startPlaceCoords, endPlaceCoords)).then(
+                (res: any) => {
+                    res.json().then((data: any) => {
+                        const distance = data.routes[0].distance
+                        form.setFieldValue('distance', distance * 0.001)
+                    })
+                },
+                (err: any) => {
+                    console.log(err)
+                }
+            )
+        }
+        // deps - better to check if place coords changed with this hack, than additional requests :)
+    }, [JSON.stringify(startPlaceCoords), JSON.stringify(endPlaceCoords)])
+
+    useEffect(() => {
         const { distance, price, rounding, backDrive } = form.values
         if (distance && price) {
             let res = roundPrice(distance * price * (backDrive ? 2 : 1), parseInt(rounding))
@@ -81,6 +102,7 @@ export default function MainApp() {
         } else {
             form.setFieldValue('result', `...`)
         }
+        console.log(form.values)
     }, [distance, price, rounding, backDrive])
 
     const handleAutocompleteConfirm = (value: Person) => {
@@ -127,18 +149,25 @@ export default function MainApp() {
                         withAsterisk
                         {...form.getInputProps('date')}
                     />
-                    <TextInput
+                    <SerachPlaceInput
                         withAsterisk
                         label="Start destination"
                         placeholder="Search..."
+                        onItemSubmit={place => {
+                            setStartPlaceCoords(place.center)
+                        }}
                         {...form.getInputProps('destinationStart')}
                     />
-                    <TextInput
+                    <SerachPlaceInput
                         withAsterisk
                         label="End destination"
                         placeholder="Search..."
+                        onItemSubmit={place => {
+                            setEndPlaceCoords(place.center)
+                        }}
                         {...form.getInputProps('destinationEnd')}
                     />
+
                     <NumberInput
                         min={1}
                         step={0.5}
@@ -146,8 +175,8 @@ export default function MainApp() {
                         stepHoldDelay={200}
                         stepHoldInterval={100}
                         withAsterisk
-                        label="Distance"
-                        placeholder="Km"
+                        label="Distance (km)"
+                        placeholder="km"
                         {...form.getInputProps('distance')}
                     />
                     <NumberInput
