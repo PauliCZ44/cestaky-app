@@ -17,7 +17,7 @@ import { collection, getDocs } from 'firebase/firestore'
 import { useAtom } from 'jotai'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import FluentCalendarLtr24Regular from '~icons/fluent/calendar-ltr-24-regular'
-import { SerachPlaceInput } from '../Components/serachPlaceInput'
+import { SerachPlaceAutocomplete } from '../Components/SerachPlaceAutocomplete'
 import { AutoCompleteItem } from '../Components/shared/PersonSelectItem'
 import { useAuth, useFirestore } from '../lib/firebase'
 import { userSettingsAtom } from '../store'
@@ -149,7 +149,7 @@ export default function MainApp() {
                         withAsterisk
                         {...form.getInputProps('date')}
                     />
-                    <SerachPlaceInput
+                    <SerachPlaceAutocomplete
                         withAsterisk
                         label="Start destination"
                         placeholder="Search..."
@@ -158,7 +158,7 @@ export default function MainApp() {
                         }}
                         {...form.getInputProps('destinationStart')}
                     />
-                    <SerachPlaceInput
+                    <SerachPlaceAutocomplete
                         withAsterisk
                         label="End destination"
                         placeholder="Search..."

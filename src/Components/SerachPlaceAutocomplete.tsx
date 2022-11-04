@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { createPlaceRequest, token } from '../utils/constants'
 import { PlaceAutoCompleteItem } from './shared/PlaceAutoCompleteItem'
 
-export function SerachPlaceInput(props: AutocompleteProps) {
+export function SerachPlaceAutocomplete(props: AutocompleteProps) {
     const [value, setValue] = useState<string>('')
     const [debounced] = useDebouncedValue(value, 300)
     const [results, setResults] = useState<any[]>([])
