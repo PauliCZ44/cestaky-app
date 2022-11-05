@@ -7,10 +7,12 @@ Simple web app that can easily calculate price of the fuel when traveling.
 TODO:
 
 -   [x] MVP - app cal calc the price
--   [ ] Handle authentication
--   [ ] Implement the person book list
--   [ ] Use geolocation API for distances
--   [ ] Create documents/pdf from the results
+-   [x] Handle authentication
+-   [x] Implement the person book list
+-   [x] Use geolocation API for distances
+-   [ ] Use geolocation for persons and save their initial lcoation to DB
+-   [ ] Create documents/pdf from the calculated results
+-   [ ] Multilanguage support (EN / CS)
 
 ### Mantine + Vite template
 
@@ -22,5 +24,3 @@ Links:
 
 -   [Mantine documentation](https://mantine.dev/)
 -   [Vite documentation](https://vitejs.dev/)
-
-Deploy

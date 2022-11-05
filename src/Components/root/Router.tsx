@@ -1,14 +1,14 @@
 import React, { lazy, ReactNode, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Layout from './Layout'
 import { useAuthState } from '../contexts/UserContext'
-import MainApp from '../../pages/MainApp'
-import Login from '../../pages/Login'
 import Loader from '../shared/Loader'
 import Settings from '../../pages/Settings'
 import StoreProvider from './StoreProvider'
 
 const Error404 = lazy(() => import('../../pages/Error404'))
+const Layout = lazy(() => import('./Layout'))
+const Login = lazy(() => import('../../pages/Login'))
+const MainApp = lazy(() => import('../../pages/MainApp'))
 const Persons = lazy(() => import('../../pages/Persons'))
 const Register = lazy(() => import('../../pages/Register'))
 
@@ -63,7 +63,14 @@ export default function Router({ isDark, toggleColorScheme }: RouterProps) {
                     )
                 }
             >
-                <Route index element={<MainApp />} />
+                <Route
+                    index
+                    element={
+                        <WithSuspense>
+                            <MainApp />
+                        </WithSuspense>
+                    }
+                />
                 <Route
                     path="persons"
                     element={
